@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html ng-app>
+<head>
+    <title>Rendering HTML inline with AngularJS</title>
+    <script src="Javascript/angular.min.js"></script>
+    <script src="Javascript/Sample2Controller.js"></script>
+</head>
+
+<body data-ng-init="">
+
+<div class="container">
+     <h3>Rendering HTML inline with AngularJS</h3>
+
+    <div ng-controller="MyCtrl">
+        <div ng-bind-html="my_html | to_trusted"></div>
+    </div>
+</div>
+</body>
+</html>
