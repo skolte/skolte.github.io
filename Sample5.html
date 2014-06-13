@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html ng-app="gemStore">
-  <head>
-    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
-    <script type="text/javascript" src="Javascript/angular.min.js"></script>
-    <script type="text/javascript" src="Javascript/sample5app.js"></script>
-  </head>
-  <body>
-    <h1>{{ "Hello, Angular!" }}</h1>
-  </body>
+<html>
+
+<head>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <script src="Javascript/angular.min.js"></script>
+  <script type="text/javascript" src="Javascript/Sample5app.js"></script>
+<script type="text/javascript" src="Javascript/protractor.js"></script>
+</head>
+
+<body ng-app="">
+  <div ng-controller="Cntl2" class="expressions">
+    Expression:
+    <input type='text' ng-model="expr" size="80" />
+    <button ng-click="addExp(expr)">Evaluate</button>
+    <ul>
+      <li ng-repeat="expr in exprs track by $index">
+        [ <a href="" ng-click="removeExp($index)">X</a> ]
+        <tt>{{expr}}</tt> => <span ng-bind="$parent.$eval(expr)"></span>
+      </li>
+    </ul>
+  </div>
+
+  Event ($event expression)
+  <div ng-controller="EventController">
+    <button ng-click="clickMe($event)">Event</button>
+    <p><code>$event</code>: <pre> {{$event | json}}</pre>
+      <p><code>clickEvent (whatever info you can get when you click)</code>: <pre>{{clickEvent | json}}</pre>
+
+  </div>
+
+  <div ng-controller="OneTimeBindingController">
+    <button ng-click="clickMe($event)">Click Me</button>
+    <p id="one-time-binding-example">One time binding: {{::name}}</p>
+    <!-- An expression that starts with :: is considered a one-time expression. -->
+    <p id="normal-binding-example">Normal binding: {{name}}</p>
+  </div>
+
+</body>
+
 </html>
