@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="gemStore">
+  <head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <script type="text/javascript" src="Javascript/angular.min.js"></script>
+    <script type="text/javascript" src="Javascript/Sample7app.js"></script>
+  </head>
+  <body ng-controller="StoreController as store">
+    <p>It displays all products in the array. It uses 'ng-repeat' directive.</p>
+    
+    <div class="product row" ng-repeat="product in store.products">
+        <div ng-hide="product.soldOut">
+      <h3>
+        {{ product.name }}
+        <em class="pull-right">$ {{ product.price }}</em>
+      </h3>
+      <p>This button will be displayed only if 'canPurchase' property is true. It uses 'ng-show' directive.
+      Even without this property, it won't show the button.</p>
+      <p><button ng-show="product.canPurchase">Add to Cart</button></p> <!-- this button will be displayed only if 'canPurchase' property is true!-->
+    </div>
+      
+  </body>
+</html>
