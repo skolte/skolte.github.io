@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Service Names and Operations with D3</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Services/dc.css"/>
+</head>
+<body>
+
+<div id="chart-pie-ServiceName"></div>
+<div id="chart-pie-year"></div>
+<div id="chart-row-ServiceOperation"></div>
+
+<script type="text/javascript" src="../Services/d3.js"></script>
+<script type="text/javascript" src="../Services/crossfilter.js"></script>
+<script type="text/javascript" src="../Services/dc.js"></script>
+<script>
+// Read JSON async .. TODO : Replace this stuff with .ajax call.
+var xmlhttp = new XMLHttpRequest();
+var url = "servicedata.json";
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var myArr = JSON.parse(xmlhttp.responseText);
+        myFunction(myArr); // TODO : Can you assign serviceData here?
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+// Done reading JSON, just make it available in a local var. Probably throwaway code.
+var serviceData;
+function myFunction(arr) {
+    serviceData = arr;
+}
+
+// Declare all plots that you will use.
+var serviceNamePieChart   = dc.pieChart("#chart-pie-ServiceName")
+    yearPieChart   = dc.pieChart("#chart-pie-year")
+    ServiceOperationRowChart = dc.rowChart("#chart-row-ServiceOperation");
+    
+// Set crossfilter, set dimension and grouping.
+var ndx = crossfilter(serviceData),
+    yearDim  = ndx.dimension(function(d) {return +d.year;}),
+    statsPerYear = yearDim.group().reduceSum(function(d) {return +d.stats;}),
+    ServiceNameDim  = ndx.dimension(function(d) {return d.serviceName;}),
+    statsPerServiceName = ServiceNameDim.group().reduceSum(function(d) {return +d.stats;}),
+    ServiceOperationDim  = ndx.dimension(function(d) {return d.serviceOperation;}),
+    statsPerServiceOperation = ServiceOperationDim.group().reduceSum(function(d) {return +d.stats;});
+
+// Set plot for service name. 
+serviceNamePieChart
+    .width(200).height(200)
+    .dimension(ServiceNameDim)
+    .group(statsPerServiceName)
+    .innerRadius(50);
+
+// Set year pie chart. // TODO : This should consider dates / timestamps. There might be a better way.
+yearPieChart
+    .width(200).height(200)
+    .dimension(yearDim)
+    .group(statsPerYear)
+    .innerRadius(50);
+
+// Set service operation plot.
+ServiceOperationRowChart
+    .width(350).height(200)
+    .dimension(ServiceOperationDim)
+    .group(statsPerServiceOperation)
+    .elasticX(true);
+    
+// Render all.
+dc.renderAll();
+</script>
+
+</body>
+</html>
